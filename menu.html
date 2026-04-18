@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabores Auténticos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: { extend: { colors: { primary: '#C8553D', secondary: '#F28F3B', dark: '#2D2D2D' } } }
+        }
+    </script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .price-tag { @apply bg-secondary text-white font-bold px-4 py-1 rounded-full inline-block mt-2; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+        /* ESTILOS RULETA */
+        #ruleta {
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #000000 0deg 30deg,
+                #228B22 30deg 60deg,
+                #000000 60deg 90deg,
+                #1E90FF 90deg 120deg,
+                #000000 120deg 150deg,
+                #FF8C00 150deg 180deg,
+                #000000 180deg 210deg,
+                #800080 210deg 240deg,
+                #000000 240deg 270deg,
+                #FFD700 270deg 300deg,
+                #000000 300deg 330deg
+            );
+            position: relative;
+            margin: auto;
+            transition: transform 4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            border: 8px solid #333;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+        .sector {
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            background: #ffffff;
+            top: 50%;
+            left: 50%;
+            transform-origin: left center;
+        }
+        .texto-sector {
+            position: absolute;
+            font-weight: bold;
+            font-size: 11px;
+            transform-origin: center;
+            color: white;
+        }
+        #flecha {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #222;
+            z-index: 10;
+            filter: drop-shadow(0 3px 3px rgba(0,0,0,0.5));
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <a href="https://wa.me/56930200238" target="_blank" style="position:fixed;bottom:20px;right:20px;z-index:100;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" alt="WhatsApp" style="width:60px;height:60px;">
+    </a>
+
+    <!-- LOGIN -->
+    <div id="login" class="fixed inset-0 bg-gray-100 flex items-center justify-center z-50">
+        <div class="bg-white p-10 rounded-3xl shadow-2xl max-w-sm w-full">
+            <h1 class="text-3xl font-bold text-center text-primary mb-6">Bienvenido</h1>
+            <button id="btnEntrar" class="w-full bg-green-600 text-white py-4 rounded-xl text-lg font-bold mb-4">👤 Entrar</button>
+            <button id="btnAdmin" class="w-full bg-dark text-white py-3 rounded-xl">🔐 Panel Administrador</button>
+            <input type="password" id="passAdmin" placeholder="Contraseña" class="hidden w-full mt-2 p-3 border rounded">
+            <button id="confAdmin" class="hidden w-full mt-2 bg-secondary text-white py-2 rounded">Confirmar</button>
+        </div>
+    </div>
+
+    <!-- CONTENIDO -->
+    <div id="contenido" class="hidden">
+
+        <header class="bg-primary text-white py-16 text-center">
+            <h1 class="text-5xl font-bold">Sabores Auténticos</h1>
+        </header>
+
+        <main class="max-w-7xl mx-auto py-12 px-4">
+            <h2 class="text-4xl font-bold text-center mb-10">Especialidades de la Casa</h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                
+                <div class="bg-white rounded-3xl shadow-xl overflow-hidden card-hover">
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold text-primary mb-4">Empanadas de Pino</h3>
+                        <p class="text-gray-600 mb-6">Masa delgada y crujiente, rellenas de carne picada, cebolla, huevo y aceituna.</p>
+                        <div class="price-tag">$2.000 c/u</div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl shadow-xl overflow-hidden card-hover">
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold text-primary mb-4">Empanadas Napolitanas</h3>
+                        <p class="text-gray-600 mb-6">Jamón, queso derretido, tomate y orégano.</p>
+                        <div class="price-tag">$2.000 c/u</div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl shadow-xl overflow-hidden card-hover">
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold text-primary mb-4">Chorrillanas</h3>
+                        <p class="text-gray-600 mb-6">Papas fritas con carne, cebolla caramelizada, huevos fritos y chorizo.</p>
+                        <div class="price-tag">Individual: $6.500</div>
+                        <div class="price-tag mt-2">Para 2: $11.000</div>
+                        <div class="price-tag mt-2">Para 4: $15.000</div>
+                        <div class="price-tag mt-2">Para 6: $20.000</div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl shadow-xl overflow-hidden card-hover">
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold text-primary mb-4">Papas Bravas</h3>
+                        <p class="text-gray-600 mb-6">Con pollo, champiñones y bañadas en salsa blanca cremosa.</p>
+                        <div class="price-tag">Individual: $6.500</div>
+                        <div class="price-tag mt-2">Para 2: $11.000</div>
+                        <div class="price-tag mt-2">Para 4: $15.000</div>
+                        <div class="price-tag mt-2">Para 6: $20.000</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="text-center mt-12">
+                <button onclick="descargar()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-full shadow-lg text-xl">
+                    💾 DESCARGAR MENÚ
+                </button>
+            </div>
+        </main>
+
+        <!-- SECCIÓN RULETA -->
+        <section class="py-16 px-4 bg-gray-100">
+            <div class="max-w-2xl mx-auto text-center">
+                <h2 class="text-5xl font-black text-red-600 mb-4">¡GIRA Y GANA!</h2>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-lg mb-8 text-left">
+                    <h3 class="text-2xl font-bold text-center mb-4">¿Cómo jugar?</h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg text-gray-700">
+                        <li>Pide jugar y gira la ruleta para probar tu suerte.</li>
+                        <li>Si cae en un premio, puedes reclamarlo en la entrega.</li>
+                        <li>Si cae en <strong>MUERTE</strong>, pierdes y debes volver a pagar.</li>
+                        <li>Valor por cada giro: <strong>$500</strong>.</li>
+                        <li>Debes pedir el código al local para poder girar.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-lg mb-8 text-left">
+                    <h3 class="text-2xl font-bold text-center mb-4">Significado de los colores</h3>
+                    <ul class="space-y-2 text-lg">
+                        <li>🟢 <strong>VERDE:</strong> 2 Empanadas de Pino</li>
+                        <li>🔵 <strong>AZUL:</strong> 2 Empanadas Napolitanas</li>
+                        <li>🟠 <strong>NARANJO:</strong> Chorrillana</li>
+                        <li>🟣 <strong>MORADO:</strong> Papas Bravas</li>
+                        <li>🟡 <strong>DORADO:</strong> Elige lo que quieras</li>
+                        <li>⚫ <strong>NEGRO:</strong> Muerte (Pierdes)</li>
+                    </ul>
+                </div>
+
+                <p class="text-3xl font-bold mb-6">Valor por giro: <span class="text-red-600">$500</span></p>
+
+                <div class="relative w-[350px] h-[350px] mx-auto">
+                    <div id="flecha"></div>
+                    <div id="ruleta"></div>
+                </div>
+
+                <button id="btnGirar" class="mt-8 bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-12 rounded-full text-2xl shadow-xl">
+                    GIRAR RULETA
+                </button>
+
+                <div id="resultado" class="mt-6 text-2xl font-bold p-4 rounded-xl bg-white shadow-lg"></div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN COMENTARIOS -->
+        <section class="py-16 px-4 bg-white">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-center mb-10">📝 Deja tu comentario</h2>
+                
+                <div class="bg-gray-50 p-8 rounded-3xl shadow-xl mb-10">
+                    <input type="text" id="nombreCom" placeholder="Tu nombre" class="w-full p-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-primary mb-4">
+                    <textarea id="textoCom" rows="3" placeholder="Escribe tu experiencia o recomendación..." class="w-full p-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-primary mb-4"></textarea>
+                    <button onclick="agregarComentario()" class="w-full bg-primary hover:bg-opacity-90 text-white font-bold py-4 rounded-xl text-lg">
+                        ✅ ENVIAR COMENTARIO
+                    </button>
+                </div>
+
+                <h3 class="text-2xl font-bold mb-6">Lo que dicen nuestros clientes:</h3>
+                <div id="listaComentarios" class="space-y-4">
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL SECRETO DEL DUEÑO -->
+        <div id="panelAdmin" class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+            <div class="bg-white p-8 rounded-3xl shadow-2xl max-w-lg w-full">
+                <h2 class="text-3xl font-bold text-center mb-6 text-red-600">🔒 PANEL DEL DUEÑO</h2>
+                <h3 class="text-xl font-bold mb-4">Usuarios que han ingresado:</h3>
+                <div id="listaVisitas" class="bg-gray-100 p-4 rounded-xl max-h-96 overflow-y-auto">
+                </div>
+                <button onclick="cerrarPanel()" class="w-full mt-6 bg-dark text-white py-3 rounded-xl">CERRAR</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- REGISTRO DE VISITAS ---
+        function registrarVisita() {
+            const ahora = new Date();
+            const fechaHora = ahora.toLocaleString('es-CL');
+            let visitas = JSON.parse(localStorage.getItem('visitas') || '[]');
+            visitas.push(fechaHora);
+            localStorage.setItem('visitas', JSON.stringify(visitas));
+        }
+
+        function mostrarVisitas() {
+            let visitas = JSON.parse(localStorage.getItem('visitas') || '[]');
+            const lista = document.getElementById('listaVisitas');
+            lista.innerHTML = "";
+            if(visitas.length === 0) {
+                lista.innerHTML = "<p class='text-gray-500'>Aún no hay visitas</p>";
+                return;
+            }
+            visitas.forEach((fecha, index) => {
+                const div = document.createElement('div');
+                div.className = "p-2 border-b";
+                div.innerHTML = `<strong>Visita ${index + 1}:</strong> ${fecha}`;
+                lista.appendChild(div);
+            });
+        }
+
+        function cerrarPanel() {
+            document.getElementById('panelAdmin').classList.add('hidden');
+        }
+
+        // --- LOGIN ---
+        const login = document.getElementById('login');
+        const contenido = document.getElementById('contenido');
+
+        document.getElementById('btnEntrar').addEventListener('click', () => {
+            registrarVisita();
+            login.style.display = 'none';
+            contenido.classList.remove('hidden');
+        });
+
+        document.getElementById('btnAdmin').addEventListener('click', () => {
+            document.getElementById('passAdmin').classList.toggle('hidden');
+            document.getElementById('confAdmin').classList.toggle('hidden');
+        });
+
+        document.getElementById('confAdmin').addEventListener('click', () => {
+            if(document.getElementById('passAdmin').value === "admin") {
+                login.style.display = 'none';
+                contenido.classList.remove('hidden');
+                mostrarVisitas();
+                document.getElementById('panelAdmin').classList.remove('hidden');
+            } else {
+                alert("Contraseña incorrecta");
+            }
+        });
+
+        // --- DESCARGAR ---
+        function descargar(){
+            const a = document.createElement('a');
+            a.href = 'data:text/html,' + encodeURIComponent(document.documentElement.outerHTML);
+            a.download = 'menu.html';
+            a.click();
+        }
+
+        // --- RULETA ---
+        const premios = [
+            "MUERTE", "2 EMP. PINO", "MUERTE", "2 EMP. NAPO",
+            "MUERTE", "CHORRILLANA", "MUERTE", "PAPAS BRAVAS",
+            "MUERTE", "ELECCIÓN", "MUERTE"
+        ];
+
+        const ruleta = document.getElementById('ruleta');
+        const btnGirar = document.getElementById('btnGirar');
+        const resultado = document.getElementById('resultado');
+        let girando = false;
+
+        function crearRuleta() {
+            const gradosPorSector = 360 / premios.length;
+            ruleta.innerHTML = '';
+            
+            premios.forEach((premio, i) => {
+                const angulo = i * gradosPorSector;
+                
+                const linea = document.createElement('div');
+                linea.className = 'sector';
+                linea.style.transform = `rotate(${angulo}deg)`;
+                ruleta.appendChild(linea);
+
+                const texto = document.createElement('div');
+                texto.className = 'texto-sector';
+                texto.innerHTML = premio;
+                texto.style.left = '70%';
+                texto.style.top = '50%';
+                texto.style.transform = `translate(-50%, -50%) rotate(${angulo + gradosPorSector/2}deg)`;
+                ruleta.appendChild(texto);
+            });
+        }
+        crearRuleta();
+
+        btnGirar.addEventListener('click', () => {
+            if(girando) return;
+
+            const codigo = prompt("Ingresa el código para jugar:");
+            if(codigo === null || codigo.toUpperCase() !== "PAGAR") {
+                alert("Código incorrecto. No puedes jugar.");
+                return;
+            }
+
+            girando = true;
+            btnGirar.disabled = true;
+            btnGirar.innerText = "GIRANDO...";
+            resultado.innerHTML = "";
+
+            const gradosPorSector = 360 / premios.length;
+            const vueltas = 5 * 360;
+            
+            const esMuerte = Math.random() < 0.8;
+            const indiceFinal = esMuerte ? 0 : Math.floor(Math.random() * (premios.length - 1)) + 1;
+
+            const anguloFinal = vueltas + (indiceFinal * gradosPorSector) + (gradosPorSector / 2);
+
+            ruleta.style.transition = "transform 4s cubic-bezier(0.2, 0.8, 0.2, 1)";
+            ruleta.style.transform = `rotate(${anguloFinal}deg)`;
+
+            setTimeout(() => {
+                girando = false;
+                btnGirar.disabled = false;
+                btnGirar.innerText = "GIRAR RULETA";
+                
+                const premioGanado = premios[indiceFinal];
+
+                if(premioGanado === "MUERTE") {
+                    resultado.innerHTML = "PERDISTE<br>Caíste en Muerte. Paga $500 para volver a intentar.";
+                    resultado.style.color = "red";
+                } else {
+                    resultado.innerHTML = "¡GANASTE!<br>Te ganaste: " + premioGanado + "<br>Recuerda reclamar tu premio en la entrega.";
+                    resultado.style.color = "green";
+                }
+            }, 4000);
+        });
+
+        // --- SISTEMA DE COMENTARIOS ---
+        function agregarComentario() {
+            const nombre = document.getElementById('nombreCom').value;
+            const texto = document.getElementById('textoCom').value;
+
+            if(nombre === "" || texto === "") {
+                alert("Por favor completa tu nombre y tu comentario");
+                return;
+            }
+
+            const div = document.createElement('div');
+            div.className = "bg-gray-50 p-6 rounded-xl shadow";
+            div.innerHTML = `
+                <h4 class="font-bold text-lg">${nombre}</h4>
+                <p class="text-gray-600">${texto}</p>
+            `;
+
+            document.getElementById('listaComentarios').prepend(div);
+
+            document.getElementById('nombreCom').value = "";
+            document.getElementById('textoCom').value = "";
+
+            alert("¡Comentario enviado! Muchas gracias.");
+        }
+    </script>
+</body>
+</html>
